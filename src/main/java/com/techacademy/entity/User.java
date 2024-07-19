@@ -8,10 +8,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email; 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import lombok.Data;
 
+// Lombok@Dataアノテーション 対象クラスのインスタンス変数に対してgetter/setterでアクセスすることが可能
 @Data
+// @Entityアノテーション　このクラスはエンティティと認識される
 @Entity
+// @Tableアノテーション 特定のMySQLデータベースにテーブル名を追加するために使う
 @Table(name = "user")
 public class User {
 
@@ -27,18 +38,26 @@ public class User {
 
     /** 名前。20桁。null不許可 */
     @Column(length = 20, nullable = false)
+    @NotEmpty // 追加
+    @Length(max=20) // 追加
     private String name;
 
     /** 性別。2桁。列挙型（文字列） */
     @Column(length = 2)
     @Enumerated(EnumType.STRING)
+    @NotNull
+    // Genderはデータ型、上でEnumの定義を設定している。genderは変数
     private Gender gender;
 
     /** 年齢 */
+    @Min(0)
+    @Max(120)
     private Integer age;
 
     /** メールアドレス。50桁。null許可 */
     @Column(length = 50)
+    @Email
+    @Length(max=50)
     private String email;
 
 }
